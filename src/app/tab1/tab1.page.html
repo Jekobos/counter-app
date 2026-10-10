@@ -9,24 +9,4 @@
     heading="New counter"
     (saved)="onSaved($event)"
   ></app-counter>
-
-  @if (savedCounters.length > 0) {
-    <ion-list>
-      <ion-list-header>
-        <ion-label>Saved counters</ion-label>
-      </ion-list-header>
-
-      @for (counter of savedCounters; track counter.id) {
-        <ion-item>
-          <ion-label>
-            <h2>{{ counter.name }}</h2>
-            <p>{{ counter.id }}</p>
-          </ion-label>
-          <ion-note slot="end">{{ counter.value }}</ion-note>
-        </ion-item>
-      }
-    </ion-list>
-  } @else {
-    <p class="empty-state">No counter has been saved yet.</p>
-  }
 </ion-content>
