@@ -1,17 +1,32 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-title>CounterApp</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <app-counter
+    heading="New counter"
+    (saved)="onSaved($event)"
+  ></app-counter>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  @if (savedCounters.length > 0) {
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Saved counters</ion-label>
+      </ion-list-header>
+
+      @for (counter of savedCounters; track counter.id) {
+        <ion-item>
+          <ion-label>
+            <h2>{{ counter.name }}</h2>
+            <p>{{ counter.id }}</p>
+          </ion-label>
+          <ion-note slot="end">{{ counter.value }}</ion-note>
+        </ion-item>
+      }
+    </ion-list>
+  } @else {
+    <p class="empty-state">No counter has been saved yet.</p>
+  }
 </ion-content>
