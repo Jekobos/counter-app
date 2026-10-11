@@ -157,4 +157,20 @@ describe('CounterService', () => {
 
     errorSpy.mockRestore();
   });
+
+    it('should compute total and average from stored counters', async () => {
+    getMock.mockResolvedValue({
+      value: JSON.stringify([first, second]),
+    });
+
+    await service.initialize();
+
+    expect(service.total()).toBe(3);
+    expect(service.average()).toBe(1.5);
+  });
+
+  it('should report zero total and average on empty history', () => {
+    expect(service.total()).toBe(0);
+    expect(service.average()).toBe(0);
+  });
 });

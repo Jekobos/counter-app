@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ToastController } from '@ionic/angular';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SavedCounter } from '../models/saved-counter';
 import { CounterService } from '../services/counter.service';
@@ -8,12 +9,19 @@ describe('Tab1Page', () => {
   let component: Tab1Page;
   let fixture: ComponentFixture<Tab1Page>;
   let addSpy: ReturnType<typeof vi.fn>;
+  let toastCreateSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     addSpy = vi.fn().mockResolvedValue(undefined);
 
+    const presentSpy = vi.fn().mockResolvedValue(undefined);
+    toastCreateSpy = vi.fn().mockResolvedValue({ present: presentSpy });
+
     TestBed.configureTestingModule({
-      providers: [{ provide: CounterService, useValue: { add: addSpy } }],
+      providers: [
+        { provide: CounterService, useValue: { add: addSpy } },
+        { provide: ToastController, useValue: { create: toastCreateSpy } },
+      ],
     });
 
     fixture = TestBed.createComponent(Tab1Page);
@@ -25,7 +33,7 @@ describe('Tab1Page', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should delegate saved counters to CounterService.add', async () => {
+  it('should delegate to CounterService.add and show a toast', async () => {
     const counter: SavedCounter = {
       id: 'first',
       name: 'First',
@@ -36,5 +44,8 @@ describe('Tab1Page', () => {
     await component.onSaved(counter);
 
     expect(addSpy).toHaveBeenCalledWith(counter);
+    expect(toastCreateSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ color: 'success' }),
+    );
   });
 });

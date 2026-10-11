@@ -1,15 +1,43 @@
 .history-header,
+.summary,
+.history-controls,
+ion-searchbar,
 ion-list,
 .state-message {
   max-width: 40rem;
   margin: 1rem auto;
 }
 
-.history-header {
+.summary {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--ion-color-light);
+}
+
+.summary-line {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ion-color-dark);
+}
+
+.summary-line strong {
+  font-size: 1.1rem;
+}
+
+.history-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.history-controls ion-select {
+  flex: 1 1 14rem;
+  max-width: 20rem;
 }
 
 .state-message {

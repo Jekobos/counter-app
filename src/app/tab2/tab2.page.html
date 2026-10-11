@@ -13,34 +13,67 @@
   } @else if (counterService.counters().length === 0) {
     <p class="state-message">The history is empty.</p>
   } @else {
-    <div class="history-header">
-      <p>Entries: {{ counterService.counters().length }}</p>
+    <div class="summary">
+      <p class="summary-line">
+        Entries: <strong>{{ counterService.counters().length }}</strong>
+      </p>
+      <p class="summary-line">
+        Total: <strong>{{ counterService.total() }}</strong>
+      </p>
+      <p class="summary-line">
+        Average:
+        <strong>{{ counterService.average() | number: '1.0-2' }}</strong>
+      </p>
+    </div>
+
+    <ion-searchbar
+      placeholder="Search by name"
+      debounce="150"
+      (ionInput)="onSearchInput($event)"
+    ></ion-searchbar>
+
+    <div class="history-controls">
+      <ion-select
+        label="Sort by"
+        label-placement="stacked"
+        fill="outline"
+        placeholder="Newest first"
+        (ionChange)="onSortChange($event)"
+      >
+        <ion-select-option value="name">Name</ion-select-option>
+        <ion-select-option value="value">Value</ion-select-option>
+      </ion-select>
+
       <ion-button color="danger" fill="outline" size="small" (click)="clear()">
         Clear all
       </ion-button>
     </div>
 
-    <ion-list>
-      @for (counter of counterService.counters(); track counter.id) {
-        <ion-item>
-          <ion-label>
-            <h2>{{ counter.name }}</h2>
-            <p>{{ counter.createdAt | date: 'd. M. y, HH:mm' }}</p>
-          </ion-label>
+    @if (visibleCounters().length === 0) {
+      <p class="state-message">No entries match your search.</p>
+    } @else {
+      <ion-list>
+        @for (counter of visibleCounters(); track counter.id) {
+          <ion-item>
+            <ion-label>
+              <h2>{{ counter.name }}</h2>
+              <p>{{ counter.createdAt | date: 'd. M. y, HH:mm' }}</p>
+            </ion-label>
 
-          <ion-note slot="end">{{ counter.value }}</ion-note>
+            <ion-note slot="end">{{ counter.value }}</ion-note>
 
-          <ion-button
-            slot="end"
-            color="danger"
-            fill="clear"
-            aria-label="Remove entry"
-            (click)="remove(counter.id)"
-          >
-            Remove
-          </ion-button>
-        </ion-item>
-      }
-    </ion-list>
+            <ion-button
+              slot="end"
+              color="danger"
+              fill="clear"
+              aria-label="Remove entry"
+              (click)="remove(counter)"
+            >
+              Remove
+            </ion-button>
+          </ion-item>
+        }
+      </ion-list>
+    }
   }
 </ion-content>
